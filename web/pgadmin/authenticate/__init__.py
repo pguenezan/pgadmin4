@@ -22,6 +22,7 @@ from flask import session
 import config
 from pgadmin.utils import PgAdminModule
 from .registry import AuthSourceRegistry
+from .. import pgCSRFProtect
 
 MODULE_NAME = 'authenticate'
 
@@ -35,6 +36,7 @@ blueprint = AuthenticateModule(MODULE_NAME, __name__, static_url_path='')
 
 
 @blueprint.route('/login', endpoint='login', methods=['GET', 'POST'])
+@pgCSRFProtect.exempt
 def login():
     """
     Entry point for all the authentication sources.

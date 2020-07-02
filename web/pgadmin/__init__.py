@@ -393,6 +393,9 @@ def create_app(app_name=None):
 
     security.init_app(app, user_datastore)
 
+    from flask_oidc import OpenIDConnect
+    app.login_manager.oidc = OpenIDConnect(app)
+
     # register custom unauthorised handler.
     app.login_manager.unauthorized_handler(pga_unauthorised)
 
@@ -654,7 +657,7 @@ def create_app(app_name=None):
         # but the user session may still be active. Logout the user
         # to get the key again when login
         if config.SERVER_MODE and current_user.is_authenticated and \
-                current_app.keyManager.get() is None and \
+            (current_app.keyManager.get() is None and not hasattr(current_app.login_manager, 'oidc')) and \
                 request.endpoint not in ('security.login', 'security.logout'):
             logout_user()
 

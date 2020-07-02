@@ -64,6 +64,9 @@ def set_masterpass_check_text(password, clear=False):
     :param clear: remove the encrypted text
     """
     try:
+        if password is None and hasattr(current_app.login_manager, 'oidc'):
+            password = current_user.email
+
         masterpass_check = None
         if not clear:
             masterpass_check = encrypt(MASTERPASS_CHECK_TEXT, password)

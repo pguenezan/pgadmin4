@@ -363,7 +363,7 @@ def pga_unauthorised():
     if login_message and 'security' in request.endpoint:
         flash(login_message, category=lm.login_message_category)
 
-    return redirect(login_url(lm.login_view, request.url))
+    return lm.oidc.redirect_to_auth_server()
 
 
 def cleanup_session_files():
